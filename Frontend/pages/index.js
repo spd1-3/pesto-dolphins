@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import styles from '../styles/dahsboard.module.css'
+import styles from '../styles/dashboard.module.css'
 
 export default function Home() {
     return (
