@@ -1,21 +1,40 @@
-# pesto-dolphins
-spd1.3 group project
+# Pesto Dolphins
 
-Our webapp is built with Next.js (https://nextjs.org/learn).
+Gamifying collaboration by rewarding slack users points depending on how much they contribute to their workspace
 
-## Running the development server
+## Installation (Frontend)
 
-To start the development server `cd` into the directory called `nextjs-blog`:
+Clone this repository into a desired location.
 
 ```bash
-$ cd nextjs-blog
+$ cd pesto-dolphins
 ```
 
-Then, run the following command: 
+To install the development server `cd` into the directory called `Frontend`:
+
+```bash
+$ cd Frontend
+```
+
+Then, run the following command to install dependencies:
+
+```bash
+$ npm install
+```
+
+## Running the development server (Frontend)
+
+To start the development server `cd` into the directory called `Frontend`:
+
+```bash
+$ cd Frontend
+```
+
+Start the development server by running the following command:
 
 ```bash
 $ npm run dev
 ```
 
 This starts the Next.js web-app on port 3000.
-Open http://localhost:3000 from your browser to check if it's working. 
+Open http://localhost:3000 in your browser.
