@@ -38,3 +38,17 @@ $ npm run dev
 
 This starts the Next.js web-app on port 3000.
 Open http://localhost:3000 in your browser.
+
+## Installing and running the development server (Backend)
+
+Run the pipenv shell and install dependencies
+```bash
+$ cd Backend/Server
+$ pipenv shell
+$ pipenv install
+```
+
+Run the server
+```bash
+$ python3 app.py
+```
