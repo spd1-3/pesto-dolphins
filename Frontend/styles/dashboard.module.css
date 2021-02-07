@@ -88,6 +88,9 @@
     font-size: 1.25rem;
     line-height: 1.5;
 } */
+
+/* Leaderboard */
+
 .leaderboardCard {
     min-width: 100%;
     padding: 0;
@@ -126,6 +129,14 @@
 
 .leaderboardRow td:nth-child(even) {
     text-align: left;
+}
+
+/* Message Chart */
+.messageChartCard {
+    min-width: 100%;
+    padding: 1rem;
+    overflow: hidden;
+    border-radius: var(--border-radius);
 }
 
 .bgWhite {
