@@ -18,9 +18,10 @@ export default function Home() {
             </main>
             <div className={styles.components}>
                 <DashboardLeaderboard />
-                {/* Placing this duplicate here until other components are added in order to display consistent layout */}
-                <DashboardMessagesChart />
-                <TotalMessages />
+                <div className={styles.secondColumn}>
+                    <TotalMessages />
+                    <DashboardMessagesChart />
+                </div>
             </div>
             <Footer />
         </div>
