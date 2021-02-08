@@ -46,7 +46,6 @@ def get_channel(channel_id=None):
 @app.route('/teams')
 def get_teams():
     teams = [team.to_mongo().to_dict() for team in Team.objects]
-    print(teams)
     return json.dumps(teams, default=str)
 
 # /{team_id} returns stats for referenced team
