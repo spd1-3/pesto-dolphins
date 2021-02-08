@@ -3,6 +3,9 @@ from flask_cors import CORS
 from flask_mongoengine import MongoEngine
 from flask_pymongo import PyMongo
 
+from models import *
+
+import json
 import os
 from dotenv import load_dotenv, find_dotenv
 
@@ -15,23 +18,23 @@ import json
 
 app = Flask(__name__)
 CORS(app)
-app.config["MONGODB_HOST"] = MONGO_URI
-app.config["MONGO_URI"] =  MONGO_URI
-me_db = MongoEngine()
-me_db.init_app(app)
+# mongo URI for pymongo
+app.config["MONGO_URI"] = MONGO_URI
 mongo = PyMongo(app)
 db = mongo.db.pesto
 teamsdb = mongo.db.teams
 usersdb = mongo.db.users
 channelsdb = mongo.db.channels
 
-#test db
+# mongo URI for flask mongoengine
+app.config["MONGODB_HOST"] = MONGO_URI
+me_db = MongoEngine()
+me_db.init_app(app)
+
+# home route
 @app.route('/')
 def home():
-    test = db.find_one({
-        "test": "test"
-    })
-    print(test)
+    Team(name="pesto dolphins").save()
     return 'hello'
 
 # should return data from a channel
@@ -42,7 +45,9 @@ def get_channel(channel_id=None):
 # should returns all teams
 @app.route('/teams')
 def get_teams():
-    pass
+    teams = [team.to_mongo().to_dict() for team in Team.objects]
+    print(teams)
+    return json.dumps(teams, default=str)
 
 # /{team_id} returns stats for referenced team
 @app.route('/team/<team_id>')
