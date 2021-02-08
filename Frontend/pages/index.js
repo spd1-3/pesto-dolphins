@@ -3,6 +3,7 @@ import Footer from '../components/Footer'
 import DashboardHeader from '../components/DashboardHeader'
 import DashboardLeaderboard from '../components/DashboardLeaderboard'
 import DashboardMessagesChart from '../components/DashboardMessagesChart'
+import TotalMessages from '../components/TotalMessages'
 import styles from '../styles/dashboard.module.css'
 
 export default function Home() {
@@ -19,8 +20,9 @@ export default function Home() {
                 <DashboardLeaderboard />
                 {/* Placing this duplicate here until other components are added in order to display consistent layout */}
                 <DashboardMessagesChart />
+                <TotalMessages />
             </div>
             <Footer />
-      </div>
+        </div>
     )
 }
