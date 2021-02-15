@@ -241,7 +241,34 @@
 }
 
 /* Dashboard Team Profile */ 
+.teamContainer {
+    width: 100%;
+}
+
+.teamCard {
+    margin: 1rem;
+    padding: 3rem;
+    border-radius: var(--border-radius);
+    width: 52rem;
+    text-align: right;
+    margin-top: -15.5rem;
+    margin-left: 5rem;
+    /* margin: 1rem;
+    padding: 4.1rem 1.5rem 2.5rem 1.5rem;
+    border-radius: var(--border-radius);
+    margin-top: -2.2rem; */
+}
 
 .profileImg {
     border-radius: 50%;
+}
+
+.teamChildCard {
+    display: inline-block;
+    padding: 2rem;
+    height: auto;
+    position:relative;
+    border-radius: var(--border-radius);
+    z-index: 1;
+    width: 35rem;
 }
