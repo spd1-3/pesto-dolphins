@@ -31,6 +31,9 @@ app.config["MONGODB_HOST"] = MONGO_URI
 me_db = MongoEngine()
 me_db.init_app(app)
 
+def me_queryset_to_dict(me_queryset):
+    return [query.to_mongo().to_dict() for query in me_queryset]
+
 # home route
 @app.route('/')
 def home():
@@ -40,8 +43,16 @@ def home():
 @app.route('/channel/<channel_id>', methods=['GET', 'POST'])
 def channel_route(channel_id=None):
     if request.method == 'GET':
-        channel = Channel.objects(channel_id=channel_id)
-        return json.dumps(channel.to_mongo().to_dict(), default=str)
+        try:
+            channel = Channel.objects.get(channel_id=channel_id)
+        except Channel.DoesNotExist:
+            return Response(
+            "Channel not found",
+            status=400,
+        )
+        else:
+            print(type(channel.messages))
+            return json.dumps(channel.to_mongo().to_dict(), default=str)
 
     if request.method == 'POST':
         channel = Channel(
@@ -51,6 +62,18 @@ def channel_route(channel_id=None):
         )
         channel.save()
 
+@app.route('/channel/<channel_id>/messages')
+def messages_route(channel_id):
+    try:
+        channel = Channel.objects.get(channel_id=channel_id)
+        messages = channel.messages
+        return json.dumps(me_queryset_to_dict(messages), default=str)
+
+    except Channel.DoesNotExist:
+        return Response(
+        "Channel not found",
+        status=400,
+    )
 
 @app.route('/channel/<channel_id>/message/<message_id>', methods=['GET', 'POST'])
 def message_route(channel_id, message_id):
