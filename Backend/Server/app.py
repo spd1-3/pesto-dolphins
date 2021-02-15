@@ -60,7 +60,11 @@ def message_route(channel_id, message_id):
 
     # abort if channel not found
     if(channel == None):
-        abort(400, 'channel not found')
+        return Response(
+            "Channel not found",
+            status=400,
+        )
+
 
     # get messaged from channel
     channel_messages = channel.messages
