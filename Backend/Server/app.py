@@ -1,4 +1,4 @@
-from flask import Flask, Response
+from flask import Flask, Response, request
 from flask_cors import CORS
 from flask_mongoengine import MongoEngine
 from flask_pymongo import PyMongo
@@ -38,12 +38,23 @@ def home():
     return 'hello'
 
 # should return data from a channel
-@app.route('/channel/<channel_id>')
-def get_channel(channel_id=None):
-    pass
+@app.route('/channel/<channel_id>', methods['GET', 'POST'])
+def channel_route(channel_id=None):
+    if request.method == 'GET':
+        channel = Channel.objects(channel_id=channel_id)
+        return json.dumps(channel.to_mongo().to_dict(), default=str)
 
-@app.route('/channel/<channel_id>/message/<message_id>', methods = ['GET', 'POST'])
-def message(channel_id, message_id):
+    if request.method == 'POST':
+        channel = Channel(
+            channel_id = request.data['channel_id'],
+            messages = request.data['messages'],
+            team_id = request.data['team_id']
+        )
+        channel.save()
+
+
+@app.route('/channel/<channel_id>/message/<message_id>', methods=['GET', 'POST'])
+def message_route(channel_id, message_id):
     # get channel
     channel = Channel.objects(channel_id=channel_id)
 
