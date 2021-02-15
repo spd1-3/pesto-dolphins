@@ -42,16 +42,36 @@ def home():
 def get_channel(channel_id=None):
     pass
 
+@app.route('/channel/<channel_id>/message/<message_id>', methods = ['GET', 'POST'])
+def message(channel_id, message_id):
+    # get channel
+    channel = Channel.objects(channel_id=channel_id)
+
+    # abort if channel not found
+    if(channel == None):
+        abort(400, 'channel not found')
+
+    # get messaged from channel
+    channel_messages = channel.messages
+    
+    if request.method == "GET":
+        messages_dict = [message.to_mongo().to_dict() for message in channel_messages]
+        return json.dumps(messages_dict, default=str)
+
+    if request.method == "post":
+        new_message = Message(
+            message_id = request.data['message_id'],
+            text = request.data['text'],
+            sender_id = request.data['sender_id']
+        )
+        channel_messages.append(new_message)
+        channel.save()
+
 # should returns all teams
 @app.route('/teams')
 def get_teams():
     teams = [team.to_mongo().to_dict() for team in Team.objects]
     return json.dumps(teams, default=str)
-
-# /{team_id} returns stats for referenced team
-@app.route('/team/<team_id>')
-def get_team(team_id=None):
-    pass
 
 # /{user_id} returns user information
 @app.route('/user/<user_id>')
