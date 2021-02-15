@@ -46,12 +46,8 @@ def channel_route(channel_id=None):
         try:
             channel = Channel.objects.get(channel_id=channel_id)
         except Channel.DoesNotExist:
-            return Response(
-            "Channel not found",
-            status=400,
-        )
+            return Response("Channel not found", status=400)
         else:
-            print(type(channel.messages))
             return json.dumps(channel.to_mongo().to_dict(), default=str)
 
     if request.method == 'POST':
@@ -70,39 +66,37 @@ def messages_route(channel_id):
         return json.dumps(me_queryset_to_dict(messages), default=str)
 
     except Channel.DoesNotExist:
-        return Response(
-        "Channel not found",
-        status=400,
-    )
+        return Response("Channel not found", status=400)
 
 @app.route('/channel/<channel_id>/message/<message_id>', methods=['GET', 'POST'])
 def message_route(channel_id, message_id):
-    # get channel
-    channel = Channel.objects(channel_id=channel_id)
-
-    # abort if channel not found
-    if(channel == None):
-        return Response(
-            "Channel not found",
-            status=400,
-        )
-
-
-    # get messaged from channel
-    channel_messages = channel.messages
+    try:
+        # get channel
+        channel = Channel.objects.get(channel_id=channel_id)
+    except Channel.DoesNotExist:
+        # return error if channel does not exist
+        return Response("Channel not found", status=400)
+    else:
+        # get messaged from channel
+        channel_messages = channel.messages
     
-    if request.method == "GET":
-        messages_dict = [message.to_mongo().to_dict() for message in channel_messages]
-        return json.dumps(messages_dict, default=str)
+        if request.method == "GET":
+            #TODO: find and return specific message
+            return json.dumps(channel_messages, default=str)
 
-    if request.method == "post":
-        new_message = Message(
-            message_id = request.data['message_id'],
-            text = request.data['text'],
-            sender_id = request.data['sender_id']
-        )
-        channel_messages.append(new_message)
-        channel.save()
+        if request.method == "POST":
+            # new_message = Message(
+            #     message_id = request.args['message_id'],
+            #     text = request.args['text'],
+            #     sender_id = request.args['sender_id']
+            # )
+            channel_messages.append({
+                "message_id": request.args['message_id'],
+                "text": request.args['text'],
+                "sender_id": request.args['sender_id']
+            })
+            channel.save()
+            return Response(status=200)
 
 # should returns all teams
 @app.route('/teams')
