@@ -4,7 +4,9 @@ import DashboardHeader from '../components/DashboardHeader'
 import DashboardLeaderboard from '../components/DashboardLeaderboard'
 import DashboardMessagesChart from '../components/DashboardMessagesChart'
 import TotalMessages from '../components/TotalMessages'
+import WinnerBoard from '../components/WinnerBoard'
 import styles from '../styles/dashboard.module.css'
+import DashboardTeam from '../components/DashboardTeam'
 
 export default function Home() {
     return (
@@ -14,12 +16,13 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={styles.main}>
-                <DashboardHeader />
+                <DashboardTeam />
             </main>
             <div className={styles.components}>
                 <DashboardLeaderboard />
                 <div className={styles.secondColumn}>
                     <TotalMessages />
+                    <WinnerBoard />
                     <DashboardMessagesChart />
                 </div>
             </div>
