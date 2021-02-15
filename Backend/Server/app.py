@@ -34,11 +34,10 @@ me_db.init_app(app)
 # home route
 @app.route('/')
 def home():
-    Team(name="pesto dolphins").save()
     return 'hello'
 
 # should return data from a channel
-@app.route('/channel/<channel_id>', methods['GET', 'POST'])
+@app.route('/channel/<channel_id>', methods=['GET', 'POST'])
 def channel_route(channel_id=None):
     if request.method == 'GET':
         channel = Channel.objects(channel_id=channel_id)
