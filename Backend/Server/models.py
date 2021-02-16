@@ -19,3 +19,12 @@ class Channel(db.Document):
     channel_id = db.StringField()
     messages = db.ListField()
     team_id = db.StringField()
+
+def makeChannel(name=None, channel_id=None, team_id=None):
+    return {
+        "name": name,
+        "team_id": team_id,
+        "channel_id": channel_id,
+        "messages": {}
+    }
+

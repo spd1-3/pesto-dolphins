@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_mongoengine import MongoEngine
 from flask_pymongo import PyMongo
 
-from models import Channel
+from models import makeChannel, Channel
 
 import json
 import os
@@ -39,35 +39,27 @@ def me_queryset_to_dict(me_queryset):
 def home():
     return 'hello'
 
-# should return data from a channel
+# should return data from a channel or create channel
 @app.route('/channel/<channel_id>', methods=['GET', 'POST'])
 def channel_route(channel_id=None):
     if request.method == 'GET':
-        try:
-            channel = Channel.objects.get(channel_id=channel_id)
-        except Channel.DoesNotExist:
-            return Response("Channel not found", status=400)
-        else:
-            return json.dumps(channel.to_mongo().to_dict(), default=str)
+        channel = channelsdb.find_one({"channel_id": channel_id})
+        return json.dumps(channel, default=str)
 
     if request.method == 'POST':
-        channel = Channel(
-            channel_id = request.args['channel_id'],
-            team_id = request.args['team_id']
+        channel = makeChannel(
+            name = request.args.get('name'),
+            channel_id = request.args.get('channel_id'),
+            team_id = request.args.get('team_id')
         )
-        channel.save()
+        channelsdb.insert_one(channel)
         return Response(status=200)
 
 @app.route('/channel/<channel_id>/messages')
 def messages_route(channel_id):
-    try:
-        channel = Channel.objects.get(channel_id=channel_id)
-        messages = channel.messages
-        print(dir(messages))
-        return json.dumps(messages, default=str)
-
-    except Channel.DoesNotExist:
-        return Response("Channel not found", status=400)
+    channel = channelsdb.find_one({"channel_id": channel_id})
+    messages = channel.get('messages', {})
+    return json.dumps(messages, default=str)
 
 @app.route('/channel/<channel_id>/message/<message_id>', methods=['GET', 'POST'])
 def message_route(channel_id, message_id):
