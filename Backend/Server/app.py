@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_mongoengine import MongoEngine
 from flask_pymongo import PyMongo
 
-from models import *
+from models import Channel
 
 import json
 import os
@@ -32,7 +32,7 @@ me_db = MongoEngine()
 me_db.init_app(app)
 
 def me_queryset_to_dict(me_queryset):
-    return [query.to_mongo().to_dict() for query in me_queryset]
+    return [query.to_dict() for query in me_queryset]
 
 # home route
 @app.route('/')
@@ -63,7 +63,8 @@ def messages_route(channel_id):
     try:
         channel = Channel.objects.get(channel_id=channel_id)
         messages = channel.messages
-        return json.dumps(me_queryset_to_dict(messages), default=str)
+        print(dir(messages))
+        return json.dumps(messages, default=str)
 
     except Channel.DoesNotExist:
         return Response("Channel not found", status=400)
