@@ -12,4 +12,3 @@ def make_message(message_id=None, text=None, sender_id=None):
         "text": text,
         "sender_id": sender_id
     }
-
