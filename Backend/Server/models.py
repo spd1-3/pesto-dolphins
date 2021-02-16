@@ -1,11 +1,9 @@
-import mongoengine as db
-
 def make_channel(name=None, channel_id=None, team_id=None):
     return {
         "name": name,
         "team_id": team_id,
         "channel_id": channel_id,
-        "messages": []
+        "messages": {}
     }
 
 def make_message(message_id=None, text=None, sender_id=None):

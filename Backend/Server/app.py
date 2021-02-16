@@ -1,6 +1,5 @@
 from flask import Flask, Response, request
 from flask_cors import CORS
-from flask_mongoengine import MongoEngine
 from flask_pymongo import PyMongo
 
 from models import make_channel, make_message
@@ -25,14 +24,6 @@ db = mongo.db.pesto
 teamsdb = mongo.db.teams
 usersdb = mongo.db.users
 channelsdb = mongo.db.channels
-
-# mongo URI for flask mongoengine
-app.config["MONGODB_HOST"] = MONGO_URI
-me_db = MongoEngine()
-me_db.init_app(app)
-
-def me_queryset_to_dict(me_queryset):
-    return [query.to_dict() for query in me_queryset]
 
 # home route
 @app.route('/')
@@ -67,8 +58,8 @@ def message_route(channel_id, message_id):
     messages = channel.get('messages', {})
     
     if request.method == "GET":
-        #todo: find message by message_id and return it
-        return json.dumps(messages, default=str)
+        message = messages.get(message_id)
+        return json.dumps(message, default=str)
 
     if request.method == "POST":
         new_message = make_message(
@@ -76,9 +67,9 @@ def message_route(channel_id, message_id):
             text = request.args['text'],
             sender_id = request.args['sender_id']
         )
-        channelsdb.update_one(
+        channelsdb.update(
             {"channel_id": channel_id},
-            {"$push": {"messages": new_message}}
+            {"$set" : {f"messages.{message_id}": new_message}}
         )
         return Response(status=200)
 
