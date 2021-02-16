@@ -1,30 +1,17 @@
 import mongoengine as db
 
-class User(db.Document):
-    name = db.StringField()
-    slack_id = db.StringField()
-    score = db.FloatField()
-    team_name = db.StringField()
-
-class Team(db.Document):
-    team_id = db.StringField()
-    name = db.StringField()
-
-class Message(db.Document):
-    message_id = db.StringField()
-    text = db.StringField()
-    sender_id = db.StringField()
-
-class Channel(db.Document):
-    channel_id = db.StringField()
-    messages = db.ListField()
-    team_id = db.StringField()
-
-def makeChannel(name=None, channel_id=None, team_id=None):
+def make_channel(name=None, channel_id=None, team_id=None):
     return {
         "name": name,
         "team_id": team_id,
         "channel_id": channel_id,
-        "messages": {}
+        "messages": []
+    }
+
+def make_message(message_id=None, text=None, sender_id=None):
+    return {
+        "message_id": message_id,
+        "text": text,
+        "sender_id": sender_id
     }
 
