@@ -65,7 +65,6 @@ def message_route(channel_id, message_id):
 
     if request.method == "POST":
         new_message = make_message(
-            message_id = request.args['message_id'],
             text = request.args['text'],
             sender_id = request.args['sender_id']
         )
