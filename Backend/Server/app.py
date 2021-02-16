@@ -1,9 +1,10 @@
 from flask import Flask, Response, request
 from flask_cors import CORS
-from flask_mongoengine import MongoEngine
+
 from flask_pymongo import PyMongo
 
-from models import *
+from models import make_channel, make_message
+
 
 import json
 import os
@@ -26,83 +27,52 @@ teamsdb = mongo.db.teams
 usersdb = mongo.db.users
 channelsdb = mongo.db.channels
 
-# mongo URI for flask mongoengine
-app.config["MONGODB_HOST"] = MONGO_URI
-me_db = MongoEngine()
-me_db.init_app(app)
-
-def me_queryset_to_dict(me_queryset):
-    return [query.to_mongo().to_dict() for query in me_queryset]
-
 # home route
 @app.route('/')
 def home():
     return 'hello'
 
-# should return data from a channel
+# should return data from a channel or create channel
 @app.route('/channel/<channel_id>', methods=['GET', 'POST'])
 def channel_route(channel_id=None):
     if request.method == 'GET':
-        try:
-            channel = Channel.objects.get(channel_id=channel_id)
-        except Channel.DoesNotExist:
-            return Response("Channel not found", status=400)
-        else:
-            return json.dumps(channel.to_mongo().to_dict(), default=str)
+        channel = channelsdb.find_one({"channel_id": channel_id})
+        return json.dumps(channel, default=str)
 
     if request.method == 'POST':
-        channel = Channel(
-            channel_id = request.data['channel_id'],
-            messages = request.data['messages'],
-            team_id = request.data['team_id']
+        channel = make_channel(
+            name = request.args.get('name'),
+            channel_id = request.args.get('channel_id'),
+            team_id = request.args.get('team_id')
         )
-        channel.save()
+        channelsdb.insert_one(channel)
+        return Response(status=200)
 
 @app.route('/channel/<channel_id>/messages')
 def messages_route(channel_id):
-    try:
-        channel = Channel.objects.get(channel_id=channel_id)
-        messages = channel.messages
-        return json.dumps(me_queryset_to_dict(messages), default=str)
-
-    except Channel.DoesNotExist:
-        return Response("Channel not found", status=400)
+    channel = channelsdb.find_one({"channel_id": channel_id})
+    messages = channel.get('messages', {})
+    return json.dumps(messages, default=str)
 
 @app.route('/channel/<channel_id>/message/<message_id>', methods=['GET', 'POST'])
 def message_route(channel_id, message_id):
-    try:
-        # get channel
-        channel = Channel.objects.get(channel_id=channel_id)
-    except Channel.DoesNotExist:
-        # return error if channel does not exist
-        return Response("Channel not found", status=400)
-    else:
-        # get messaged from channel
-        channel_messages = channel.messages
+    channel = channelsdb.find_one({"channel_id": channel_id})
+    messages = channel.get('messages', {})
     
-        if request.method == "GET":
-            #TODO: find and return specific message
-            return json.dumps(channel_messages, default=str)
+    if request.method == "GET":
+        message = messages.get(message_id)
+        return json.dumps(message, default=str)
 
-        if request.method == "POST":
-            # new_message = Message(
-            #     message_id = request.args['message_id'],
-            #     text = request.args['text'],
-            #     sender_id = request.args['sender_id']
-            # )
-            channel_messages.append({
-                "message_id": request.args['message_id'],
-                "text": request.args['text'],
-                "sender_id": request.args['sender_id']
-            })
-            channel.save()
-            return Response(status=200)
-
-# should returns all teams
-@app.route('/teams')
-def get_teams():
-    teams = [team.to_mongo().to_dict() for team in Team.objects]
-    return json.dumps(teams, default=str)
+    if request.method == "POST":
+        new_message = make_message(
+            text = request.args['text'],
+            sender_id = request.args['sender_id']
+        )
+        channelsdb.update(
+            {"channel_id": channel_id},
+            {"$set" : {f"messages.{message_id}": new_message}}
+        )
+        return Response(status=200)
 
 # /{user_id} returns user information
 @app.route('/user/<user_id>')
