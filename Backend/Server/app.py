@@ -3,8 +3,7 @@ from flask_cors import CORS
 
 from flask_pymongo import PyMongo
 
-from models import make_channel, make_message
-
+from models import make_channel, make_message, make_user
 
 import json
 import os
@@ -32,6 +31,15 @@ channelsdb = mongo.db.channels
 def home():
     return 'hello'
 
+# return all channel ids
+@app.route('/channels')
+def find_all_channels():
+    channel_ids = []
+    channels = channelsdb.find()
+    for channel in channels:
+        channel_ids.append(channel['channel_id'])
+    return json.dumps(channel_ids, default=str)
+
 # should return data from a channel or create channel
 @app.route('/channel/<channel_id>', methods=['GET', 'POST'])
 def channel_route(channel_id=None):
@@ -43,7 +51,6 @@ def channel_route(channel_id=None):
         channel = make_channel(
             name = request.args.get('name'),
             channel_id = request.args.get('channel_id'),
-            team_id = request.args.get('team_id')
         )
         channelsdb.insert_one(channel)
         return Response(status=200)
@@ -58,6 +65,7 @@ def messages_route(channel_id):
 def message_route(channel_id, message_id):
     channel = channelsdb.find_one({"channel_id": channel_id})
     messages = channel.get('messages', {})
+    sender_id = request.args['sender_id']
     
     if request.method == "GET":
         message = messages.get(message_id)
@@ -66,18 +74,41 @@ def message_route(channel_id, message_id):
     if request.method == "POST":
         new_message = make_message(
             text = request.args['text'],
-            sender_id = request.args['sender_id']
+            sender_id = sender_id
         )
-        channelsdb.update(
+        channelsdb.update_one(
             {"channel_id": channel_id},
-            {"$set" : {f"messages.{message_id}": new_message}}
+            {"$set": {f"messages.{message_id}": new_message}}
         )
+        sender = usersdb.find_one({"user_id": sender_id})
+        if sender is not None:
+            sender_total_messages = sender.get('total_messages', 0)
+            usersdb.update_one(
+                {"user_id": sender_id},
+                {"$set": {"total_messages": sender_total_messages + 1}}
+            )
         return Response(status=200)
 
-# /{user_id} returns user information
-@app.route('/user/<user_id>')
+# returns user information
+@app.route('/user/<user_id>',  methods=['GET', 'POST'])
 def get_user(user_id=None):
-    pass
+    if request.method == "GET":
+        user = usersdb.find_one({"user_id": user_id})
+        return json.dumps(user, default=str)
+        
+    if request.method == "POST":
+        new_user = make_user(
+            name = request.args['name'],
+            user_id = request.args['user_id'],
+            email =  request.args['email'],
+            channel_id = request.args['channel_id']
+        )
+        usersdb.insert_one(new_user)
+        channelsdb.update_one(
+            {"channel_id":  request.args['channel_id']},
+            {"$push": {"user_ids": request.args['user_id']}}
+        )
+        return Response(status=200)
 
 if __name__ == '__main__':
     app.run()
