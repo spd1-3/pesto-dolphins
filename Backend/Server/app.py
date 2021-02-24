@@ -45,6 +45,8 @@ def find_all_channels():
 def channel_route(channel_id=None):
     if request.method == 'GET':
         channel = channelsdb.find_one({"channel_id": channel_id})
+        channel['users'] = list(usersdb.find({"channel_id": channel_id}))
+
         return json.dumps(channel, default=str)
 
     if request.method == 'POST':
@@ -76,9 +78,14 @@ def message_route(channel_id, message_id):
             text = request.args['text'],
             sender_id = sender_id
         )
+        channel_message_count = channel.get('message_count')
         channelsdb.update_one(
             {"channel_id": channel_id},
             {"$set": {f"messages.{message_id}": new_message}}
+        )
+        channelsdb.update_one(
+            {"channel_id": channel_id},
+            {"$set": {"message_count": channel_message_count + 1}}
         )
         sender = usersdb.find_one({"user_id": sender_id})
         if sender is not None:
@@ -94,11 +101,7 @@ def message_route(channel_id, message_id):
 def channel_users(channel_id):
     channel = channelsdb.find_one({"channel_id": channel_id})
     user_ids = channel.get('user_ids', [])
-    users = []
-    for user_id in user_ids:
-        user = usersdb.find_one({"user_id": user_id})
-        if user is not None:
-            users.append(user)
+    users = list(usersdb.find({"channel_id": channel_id}))
 
     return json.dumps(users, default=str)
 
