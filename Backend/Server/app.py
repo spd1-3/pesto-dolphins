@@ -51,7 +51,6 @@ def channel_route(channel_id=None):
         channel = make_channel(
             name = request.args.get('name'),
             channel_id = request.args.get('channel_id'),
-            team_id = request.args.get('team_id')
         )
         channelsdb.insert_one(channel)
         return Response(status=200)
@@ -102,10 +101,13 @@ def get_user(user_id=None):
             name = request.args['name'],
             user_id = request.args['user_id'],
             email =  request.args['email'],
-            team_id = request.args['team_id'],
             channel_id = request.args['channel_id']
         )
         usersdb.insert_one(new_user)
+        channelsdb.update_one(
+            {"channel_id":  request.args['channel_id']},
+            {"$push": {"user_ids": request.args['user_id']}}
+        )
         return Response(status=200)
 
 if __name__ == '__main__':
