@@ -8,13 +8,23 @@ import string
 from datetime import datetime, timedelta
 import time
 import sqlite3
+from flask_sqlalchemy import SQLAlchemy
+from models import User
+from config import db,app
+
+
+# db = SQLAlchemy(app)
+
+# app.register_blueprint(User)
 
 
 
-SIGN_IN_SECRET='861501e2ddfe4e3361f34ee020cd6825'
+load_dotenv() 
+SIGN_IN_SECRET = os.getenv("SIGN_IN_SECRET")
+Token = os.getenv("SLACK_TOKEN")
 app = Flask(__name__)
 slack_event_adapter = SlackEventAdapter(SIGN_IN_SECRET,'/slack/events',app)
-Token = "xoxb-1719150547792-1738784652929-30mzBEdVhIGAtLPWX1W8Jtgc"
+
 env_path = Path('.')/ '.env'
 load_dotenv(dotenv_path=env_path) 
 
