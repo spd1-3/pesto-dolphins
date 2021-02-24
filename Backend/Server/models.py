@@ -12,3 +12,13 @@ def make_message(message_id=None, text=None, sender_id=None):
         "text": text,
         "sender_id": sender_id
     }
+
+def make_user(name=None, user_id=None, email=None, team_id=None, channel_id=None):
+    return {
+        "name": name,
+        "user_id": user_id,
+        "email": email,
+        "team_id": team_id,
+        "channel_id": channel_id,
+        "total_messages": 0
+    }

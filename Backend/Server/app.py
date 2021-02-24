@@ -3,8 +3,7 @@ from flask_cors import CORS
 
 from flask_pymongo import PyMongo
 
-from models import make_channel, make_message
-
+from models import make_channel, make_message, make_user
 
 import json
 import os
@@ -70,14 +69,28 @@ def message_route(channel_id, message_id):
         )
         channelsdb.update(
             {"channel_id": channel_id},
-            {"$set" : {f"messages.{message_id}": new_message}}
+            {"$set": {f"messages.{message_id}": new_message}}
         )
         return Response(status=200)
 
-# /{user_id} returns user information
-@app.route('/user/<user_id>')
+# returns user information
+@app.route('/user/<user_id>',  methods=['GET', 'POST'])
 def get_user(user_id=None):
-    pass
+    if request.method == "GET":
+        user = usersdb.find_one({"user_id": user_id})
+        return json.dumps(user, default=str)
+        
+    if request.method == "POST":
+        new_user = make_user(
+            name = request.args['name'],
+            user_id = request.args['user_id'],
+            email =  request.args['email'],
+            team_id = request.args['team_id'],
+            channel_id = request.args['channel_id']
+        )
+        usersdb.insert_one(new_user)
+        return Response(status=200)
+
 
 if __name__ == '__main__':
     app.run()
