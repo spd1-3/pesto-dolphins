@@ -77,16 +77,16 @@ def message_route(channel_id, message_id):
             text = request.args['text'],
             sender_id = sender_id
         )
-        channelsdb.update(
+        channelsdb.update_one(
             {"channel_id": channel_id},
             {"$set": {f"messages.{message_id}": new_message}}
         )
         sender = usersdb.find_one({"user_id": sender_id})
         if sender is not None:
             sender_total_messages = sender.get('total_messages', 0)
-            usersdb.update(
+            usersdb.update_one(
                 {"user_id": sender_id},
-                {"total_message": sender_total_messages + 1}
+                {"$set": {"total_messages": sender_total_messages + 1}}
             )
         return Response(status=200)
 
@@ -107,7 +107,6 @@ def get_user(user_id=None):
         )
         usersdb.insert_one(new_user)
         return Response(status=200)
-
 
 if __name__ == '__main__':
     app.run()
