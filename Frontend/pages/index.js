@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Footer from '../components/Footer'
+import "tailwindcss/tailwind.css"
 
 export default function Home() {
     return (
