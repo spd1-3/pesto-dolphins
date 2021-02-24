@@ -1,6 +1,7 @@
 .container {
+    width: 100vw;
     min-height: 100vh;
-    padding: 0 0.5rem;
+    padding: 0 1rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -17,7 +18,19 @@
     align-items: center;
 }
 
+.components {
+    padding-bottom: 2rem;
+    gap: 1.4rem;
+    width: 100%;
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    flex-direction: row;
+    overflow-x: hidden;
+}
+
 .card {
+    margin: 1rem;
     padding: 5rem;
     border-radius: var(--border-radius);
 }
@@ -74,6 +87,188 @@
     line-height: 1.5;
 } */
 
+/* Leaderboard */
+
+.leaderboardCard {
+    min-width: 100%;
+    padding: 0;
+    border-radius: var(--border-radius);
+}
+
+.leaderboard {
+    width: 100%;
+    height: auto;
+    padding: 0;
+    border-radius: var(--border-radius);
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.leaderboardHead {
+    border-bottom: 1px solid var(--white);
+}
+
+.leaderboardHead:nth-child(even) {
+    text-align: left;
+    padding-left: 1rem;
+}
+
+.leaderboardHead h3 {
+    color: var(--white);
+}
+
+.leaderboardRow {
+    color: var(--dark);
+}
+
+.leaderboardRow td {
+    padding: 1rem;
+    text-align: center;
+}
+
+.leaderboardRow td:nth-child(even) {
+    text-align: left;
+}
+
+/* Second Column  */
+.secondColumn {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    flex-direction: row;
+    overflow-x: hidden;
+    gap: 1.4rem;
+}
+
+/* Message Chart */
+.messageChartCard {
+    grid-column: 1 / span 2;
+    min-width: 100%;
+    padding: 1rem;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+}
+
+.bgWhite {
+    background: var(--blur-bg);
+}
+
 .logo {
     height: 1em;
+}
+
+/* Total Messages */
+
+.totalMessagesContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.messageDiv {
+    margin-top: -5rem;
+    padding: 5rem 2rem 1rem 2rem;
+    width: 100%;
+    position: relative;
+    border-radius: var(--border-radius);
+}
+
+.messageChildDiv {
+    display: inline-block;
+    padding: 1rem 2rem 1rem 2rem;
+    height: auto;
+    position:relative;
+    border-radius: var(--border-radius);
+    z-index: 1;
+}
+
+.textLarge {
+    color: white;
+    line-height: 1.15;
+    font-size: 4rem;
+    text-align: center;
+}
+
+.textSmall {
+    color: white;
+    line-height: 1.15;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.text {
+    color: white;
+    text-align: center;
+    margin: 0.5rem;
+}
+
+/* Winner Board */
+.winnerBoardContainer {
+    margin: 1rem;
+    padding: 4.1rem 1.5rem 2.5rem 1.5rem;
+    border-radius: var(--border-radius);
+    margin-top: -2.2rem;
+}
+
+.winnerBoardRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+}
+
+.winnerBoardImg {
+    margin-right: 0.5rem;
+}
+
+.winnerBoardArea {
+    align-self: start;
+}
+
+.textLeft {
+    color: white;
+    line-height: 1.15;
+    font-size: 1.5rem;
+}
+
+.trophyChildDiv {
+    display: inline-block;
+    padding: 0.5rem;
+    height: auto;
+    position:relative;
+    border-radius: var(--border-radius);
+    z-index: 1;
+    margin-left: 2.5rem;
+}
+
+/* Dashboard Team Profile */ 
+.teamContainer {
+    width: 100%;
+}
+
+.teamCard {
+    margin: 1rem;
+    padding: 3rem;
+    border-radius: var(--border-radius);
+    width: 52rem;
+    text-align: right;
+    margin-top: -15.5rem;
+    margin-left: 5rem;
+    /* margin: 1rem;
+    padding: 4.1rem 1.5rem 2.5rem 1.5rem;
+    border-radius: var(--border-radius);
+    margin-top: -2.2rem; */
+}
+
+.profileImg {
+    border-radius: 50%;
+}
+
+.teamChildCard {
+    display: inline-block;
+    padding: 2rem;
+    height: auto;
+    position:relative;
+    border-radius: var(--border-radius);
+    z-index: 1;
+    width: 35rem;
 }
