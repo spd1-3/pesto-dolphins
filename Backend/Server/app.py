@@ -89,6 +89,19 @@ def message_route(channel_id, message_id):
             )
         return Response(status=200)
 
+# return all users within channel
+@app.route('/channel/<channel_id>/users')
+def channel_users(channel_id):
+    channel = channelsdb.find_one({"channel_id": channel_id})
+    user_ids = channel.get('user_ids', [])
+    users = []
+    for user_id in user_ids:
+        user = usersdb.find_one({"user_id": user_id})
+        if user is not None:
+            users.append(user)
+
+    return json.dumps(users, default=str)
+
 # returns user information
 @app.route('/user/<user_id>',  methods=['GET', 'POST'])
 def get_user(user_id=None):
