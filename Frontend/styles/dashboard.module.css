@@ -273,3 +273,157 @@
     z-index: 1;
     width: 35rem;
 }
+
+/* Login page */
+
+.loginContainer {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--gradient1);
+    position: absolute;
+}
+
+.loginForm {
+    background: rgba(255,255,255, 0.06);
+    padding: 4rem;
+    border-radius: 20px;
+    border-left: 1px solid rgba(255,255,255, 0.3);
+    border-top: 1px solid rgba(255,255,255, 0.3);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(70px);
+    box-shadow: 20px 20px 40px -6px rgba(0,0,0, 0.1);
+    text-align: center;
+    position: relative;
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 500px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.loginTitle {
+    font-weight: 700;
+    color: #fff;
+    opacity: 0.9;
+    font-size: 2.5rem;
+    margin-top: 0;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 4px rgba(0,0,0, 0.2);
+}
+
+.input {
+    background: transparent;
+    width: 300px;
+    padding: 0.8em;
+    margin-bottom: 2em;
+    border: none;
+    border-left: 1px solid rgba(255,255,255, 0.3);
+    border-top: 1px solid rgba(255,255,255, 0.3);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    box-shadow: 4px 4px 60px rgba(0,0,0, 0.1);
+    color: #fff;
+    font-weight: 500;
+    font-size: 0.9rem;
+    font-family: 'Montserrat', sans-serif;
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    text-shadow: 2px 2px 4px rgba(0,0,0, 0.1);
+    border-radius: 5px;
+}
+
+.input::placeholder {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0, 0.4);
+}
+
+.input:hover {
+    background: rgba(255,255,255, 0.1);
+    box-shadow: 4px 4px 60px 8px rgba(0,0,0, 0.2);
+}
+
+.loginForm input[type="email"]:focus,
+.loginForm input[type="password"]:focus {
+    background: rgba(255,255,255, 0.1);
+    box-shadow: 4px 4px 60px 8px rgba(0,0,0, 0.2);
+}
+
+.loginForm input[type="button"] {
+    margin-top: 10px;
+    width: 150px;
+    font-size: 1rem;
+}
+
+.loginForm:hover {
+    margin: 4px;
+}
+
+.loginForm input:focus,
+.loginForm button:focus,
+.loginForm select:focus
+{
+    outline: none;
+}
+
+/* Login page designs  */
+
+.drop1, .drop2, .drop3, .drop4, .drop5, .drops {
+    background: rgba(255,255,255, 0.06);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
+    border-radius: 10px;
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 10px 10px 60px -8px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+
+.drop1 {
+    height: 80px;
+    width: 80px;
+    top: -260px;
+    left: -260px;
+    z-index: -1;
+}
+
+.drop2
+{
+    height: 80px;
+    width: 80px;
+    bottom: -270px;
+    right: -230px;
+}
+.drop3
+{
+    height: 100px;
+    width: 100px;
+    bottom: -80px;
+    right: -270px;
+    z-index: -1;
+}
+
+.drop4
+{
+    height: 120px;
+    width: 120px;
+    top: -290px;
+    right: -270px;
+}
+.drop5
+{
+    height: 60px;
+    width: 60px;
+    bottom: -135px;
+    left: -180px;
+    z-index: -1;
+}
