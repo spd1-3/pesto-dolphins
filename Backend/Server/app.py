@@ -5,6 +5,7 @@ from flask_pymongo import PyMongo
 
 from models import make_channel, make_message, make_user
 
+import requests
 import json
 import os
 from dotenv import load_dotenv, find_dotenv
@@ -113,18 +114,36 @@ def get_user(user_id=None):
         return json.dumps(user, default=str)
         
     if request.method == "POST":
-        new_user = make_user(
-            name = request.args['name'],
-            user_id = request.args['user_id'],
-            email =  request.args['email'],
-            channel_id = request.args['channel_id']
-        )
-        usersdb.insert_one(new_user)
-        channelsdb.update_one(
-            {"channel_id":  request.args['channel_id']},
-            {"$push": {"user_ids": request.args['user_id']}}
-        )
+        if usersdb.find_one({"user_id": user_id}) is None:
+            new_user = make_user(
+                name = request.args['name'],
+                user_id = request.args['user_id'],
+                email =  request.args['email'],
+                channel_id = request.args['channel_id']
+            )
+            usersdb.insert_one(new_user)
+            channelsdb.update_one(
+                {"channel_id":  request.args['channel_id']},
+                {"$push": {"user_ids": request.args['user_id']}}
+            )
         return Response(status=200)
+
+# @app.route('/test')
+# def make_user_test():
+#     data = {
+#         "name": "test David",
+#         "user_id": "127",
+#         "email": "testdavid@123.com",
+#         "channel_id": "125"
+#     }
+#     headers = {'Content-Type': 'application/json'}
+#     # url = f'https://pesto-dolphin.herokuapp.com/user/{data["user_id"]}?name={data["name"]}&user_id={data["user_id"]}&email={data["email"]}&channel_id={data["channel_id"]}'
+#     # url = f'https://pesto-dolphin.herokuapp.com/user/{user_id}?name={user_name}&user_id={user_id}&email=example@email.com&channel_id={channel_id}'
+
+#     url = "https://pesto-dolphin.herokuapp.com" + f'/channel/100?name=Orange&channel_id=100'
+#     response = requests.post(url, headers=headers)
+
+#     return Response(status=200)
 
 if __name__ == '__main__':
     app.run()
