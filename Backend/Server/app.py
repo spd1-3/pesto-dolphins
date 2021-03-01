@@ -135,7 +135,7 @@ def update_message_count():
         new_count = request.args['count']
         usersdb.update_one(
             {"user_id":  user_id},
-            {"$set": {"total_message": new_count}}
+            {"$set": {"total_messages": new_count}}
         )
         return Response(status=200)
 
