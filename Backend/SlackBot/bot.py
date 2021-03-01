@@ -169,7 +169,8 @@ def message_count():
         channel=channel_id, text=f"Message: {message_count}")
     print(data)
     headers = {'Content-Type': 'application/json'}
-    url = POST_URL + f'/user/{user_id}?name={user_id}&user_id={user_id}&email=example@email.com&channel_id={channel_id}'
+    url = POST_URL + f"/set-message-count?user_id={user_id}&count={message_count}"
+    
     response = requests.post(url, data=json.dumps(data), headers=headers)
    # new_user = make_user(1,'brent',user_id,'test',message_count)
     
