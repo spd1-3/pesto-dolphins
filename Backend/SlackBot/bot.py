@@ -4,21 +4,6 @@ from pathlib import Path
 from dotenv import load_dotenv
 from flask import Flask, request, Response
 from slackeventsapi import SlackEventAdapter
-import string
-from datetime import datetime, timedelta
-import time
-import sqlite3
-from flask_sqlalchemy import SQLAlchemy
-from .models import User
-# from config import db
-# from __init__ import db,app
-# from SlackBot.models import User
-# from config import app,db
-
-
-# db = SQLAlchemy(app)
-
-# app.register_blueprint(User)
 
 
 
