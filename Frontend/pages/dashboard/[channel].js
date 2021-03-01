@@ -22,7 +22,9 @@ export default function Dashboard({ channel }) {
                 />
             </main>
             <div className={styles.components}>
-                <DashboardLeaderboard />
+                <DashboardLeaderboard
+                    users={ channel.users }
+                />
                 <div className={styles.secondColumn}>
                     <TotalMessages
                         total={ channel.message_count }

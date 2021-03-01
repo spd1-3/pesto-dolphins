@@ -2,30 +2,34 @@ import { useMemo } from 'react'
 import { useTable } from 'react-table'
 import styles from '../styles/dashboard.module.css'
 
-function DashboardLeaderboard() {
-    const data = useMemo(() => [
-        {
-            rank: '1st',
-            name: 'John Doe',
-            points: '131',
-        },
-        {
-            rank: '1st',
-            name: 'John Doe',
-            points: '131',
-        },
-        {
-            rank: '1st',
-            name: 'John Doe',
-            points: '131',
-        },
-        {
-            rank: '1st',
-            name: 'John Doe',
-            points: '131',
-        },
+function DashboardLeaderboard({ users }) {
+    const data = useMemo(() => users.sort(function (a, b) {
+        return b.total_messages - a.total_messages }
+    ).map((user, index) => {return { rank: index + 1, name: user.name, points: user.total_messages * 10}}), [])
 
-    ], [])
+    // [
+    //     {
+    //         rank: '1st',
+    //         name: 'John Doe',
+    //         points: '131',
+    //     },
+    //     {
+    //         rank: '1st',
+    //         name: 'John Doe',
+    //         points: '131',
+    //     },
+    //     {
+    //         rank: '1st',
+    //         name: 'John Doe',
+    //         points: '131',
+    //     },
+    //     {
+    //         rank: '1st',
+    //         name: 'John Doe',
+    //         points: '131',
+    //     },
+    //
+    // ]
 
     const columns = useMemo(() => [
         {
