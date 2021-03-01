@@ -3,9 +3,7 @@ import { useTable } from 'react-table'
 import styles from '../styles/dashboard.module.css'
 
 function DashboardLeaderboard({ users }) {
-    const data = useMemo(() => users.sort(function (a, b) {
-        return b.total_messages - a.total_messages }
-    ).map((user, index) => {return { rank: index + 1, name: user.name, points: user.total_messages * 10}}), [])
+    const data = useMemo(() => users.map((user, index) => {return { rank: index + 1, name: user.name, points: user.total_messages * 10}}), [])
 
     // [
     //     {

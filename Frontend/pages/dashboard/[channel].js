@@ -10,6 +10,9 @@ import styles from '../../styles/dashboard.module.css'
 import DashboardTeam from '../../components/DashboardTeam'
 
 export default function Dashboard({ channel }) {
+    const sortedUsers = channel.users.sort(function (a, b) {
+        return b.total_messages - a.total_messages }
+    )
     return (
         <div className={styles.container}>
             <Head>
@@ -23,13 +26,15 @@ export default function Dashboard({ channel }) {
             </main>
             <div className={styles.components}>
                 <DashboardLeaderboard
-                    users={ channel.users }
+                    users={ sortedUsers }
                 />
                 <div className={styles.secondColumn}>
                     <TotalMessages
                         total={ channel.message_count }
                     />
-                    <WinnerBoard />
+                    <WinnerBoard
+                        user={ sortedUsers[0] ? sortedUsers[0] : null}
+                    />
                     <DashboardMessagesChart />
                 </div>
             </div>
