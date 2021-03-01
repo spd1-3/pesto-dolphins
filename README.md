@@ -2,6 +2,13 @@
 
 Gamifying collaboration by rewarding slack users points depending on how much they contribute to their workspace
 
+
+## Demo
+
+View our awesome [landing page](https://pestodolphins.netlify.app/)
+
+View an example of our app's [dashboard here](https://pestodolphins.netlify.app/dashboard/125)
+
 ## Installation (Frontend)
 
 Clone this repository into a desired location.
