@@ -179,6 +179,7 @@
     position:relative;
     border-radius: var(--border-radius);
     z-index: 1;
+    min-width: 70%;
 }
 
 .textLarge {
@@ -240,7 +241,7 @@
     margin-left: 2.5rem;
 }
 
-/* Dashboard Team Profile */ 
+/* Dashboard Team Profile */
 .teamContainer {
     width: 100%;
 }

@@ -24,7 +24,9 @@ export default function Dashboard({ channel }) {
             <div className={styles.components}>
                 <DashboardLeaderboard />
                 <div className={styles.secondColumn}>
-                    <TotalMessages />
+                    <TotalMessages
+                        total={ channel.message_count }
+                    />
                     <WinnerBoard />
                     <DashboardMessagesChart />
                 </div>
