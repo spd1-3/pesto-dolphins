@@ -45,9 +45,7 @@ export default function Dashboard({ channel }) {
 
 export async function getStaticPaths() {
     try {
-        console.log(process.env.DB_URI)
         const res = await axios.get(process.env.DB_URI + '/channels')
-        console.log(res.data)
         const channels = res.data
         const paths = channels.map((channel) => `/dashboard/${channel}`)
         return { paths, fallback: false }
@@ -60,6 +58,5 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
     const res = await axios.get(process.env.DB_URI + '/channel/' + params.channel)
     const channel = res.data
-    console.log(channel)
     return { props: { channel }, revalidate: 1, }
 }
