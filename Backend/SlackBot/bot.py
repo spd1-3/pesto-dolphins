@@ -4,15 +4,19 @@ from pathlib import Path
 from dotenv import load_dotenv
 from flask import Flask, request, Response
 from slackeventsapi import SlackEventAdapter
+from Server.models import make_user
+from Server.app import usersdb
 
+#from Server.models import make_user
 
+#/Users/brent/Desktop/Development/makeschool/term3/spd1.3/pesto-dolphins/Backend/Server/models.py
 
 
 
 load_dotenv() 
 SIGN_IN_SECRET = os.getenv("SIGN_IN_SECRET")
 Token = os.getenv("SLACK_TOKEN")
-#app = Flask(__name__)
+app = Flask(__name__)
 slack_event_adapter = SlackEventAdapter(SIGN_IN_SECRET,'/slack/events',app)
 
 env_path = Path('.')/ '.env'
@@ -96,11 +100,12 @@ def send_welcome_message(channel, user):
 
 
 
-def check_if_bad_words(message):
-    msg = message.lower()
-    msg = msg.translate(str.maketrans('', '', string.punctuation))
+# def check_if_bad_words(message):
+#     string = ''
+#     msg = message.lower()
+#     msg = msg.translate(str.maketrans('', '', string.punctuation))
 
-    return any(word in msg for word in BAD_WORDS)
+#     return any(word in msg for word in BAD_WORDS)
 
 
 @ slack_event_adapter.on('message')
@@ -118,12 +123,12 @@ def message(payload):
 
         if text.lower() == 'start':
             send_welcome_message(f'@{user_id}', user_id)
-        elif check_if_bad_words(text):
-            ts = event.get('ts')
-            client.chat_postMessage(
-                channel=channel_id, thread_ts=ts, text="THAT IS A BAD WORD!")
-        print('-------')
-        print(event)
+        # elif check_if_bad_words(text):
+        #     ts = event.get('ts')
+        #     client.chat_postMessage(
+        #         channel=channel_id, thread_ts=ts, text="THAT IS A BAD WORD!")
+        # print('-------')
+        # print(event)
         
 
 
@@ -154,9 +159,8 @@ def message_count():
     client.chat_postMessage(
         channel=channel_id, text=f"Message: {message_count}")
     print(data)
-    new_user = User(1,'brent',user_id,'test',message_count)
-    db.session.add(new_user)
-    db.session.commit()
+   # new_user = make_user(1,'brent',user_id,'test',message_count)
+    
     
     return Response(), 200
 
@@ -165,9 +169,15 @@ def start():
     data =request.form
     user_id = request.form.get('user_id')
     user_name = request.form.get('user_name')
+    channel_id = request.form.get('channel_id')
+
+    new_user = make_user(user_name,user_id,'email@email.com',channel_id,)
+    usersdb.insert_one(new_user)
+
     print(data)
     print(user_id)
     print(user_name)
+    
 
     return Response(),200
 
