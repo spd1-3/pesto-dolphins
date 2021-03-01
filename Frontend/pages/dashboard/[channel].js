@@ -17,7 +17,9 @@ export default function Dashboard({ channel }) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={styles.main}>
-                <DashboardTeam />
+                <DashboardTeam
+                    name={ channel.name }
+                />
             </main>
             <div className={styles.components}>
                 <DashboardLeaderboard />

@@ -1,6 +1,6 @@
 import styles from '../styles/dashboard.module.css'
 
-function DashboardTeam() {
+function DashboardTeam({ name }) {
   return (
     <div>
       <div className={`${styles.teamChildCard} blur`}>
@@ -9,7 +9,7 @@ function DashboardTeam() {
             href="https://github.com/brentshierk/pesto-dolphins"
             target="_blank"
             rel="noopener noreferrer">
-              Pesto Dolphins
+              { name }
           </a>
           {' '} Dashboard
         </h1>
