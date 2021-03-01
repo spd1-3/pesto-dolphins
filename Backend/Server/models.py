@@ -3,7 +3,8 @@ def make_channel(name=None, channel_id=None):
         "name": name,
         "channel_id": channel_id,
         "messages": {},
-        "user_ids": []
+        "user_ids": [],
+        "message_count": 0
     }
 
 def make_message(message_id=None, text=None, sender_id=None):
