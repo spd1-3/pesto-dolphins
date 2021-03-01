@@ -128,6 +128,17 @@ def get_user(user_id=None):
             )
         return Response(status=200)
 
+@app.route('/set-message-count', methods=['POST'])
+def update_message_count():
+    if request.method == "POST":
+        user_id = request.args['user_id']
+        new_count = request.args['count']
+        usersdb.update_one(
+            {"user_id":  user_id},
+            {"$set": {"total_message": new_count}}
+        )
+        return Response(status=200)
+
 # @app.route('/test')
 # def make_user_test():
 #     data = {
