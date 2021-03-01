@@ -9,8 +9,11 @@ from datetime import datetime, timedelta
 import time
 import sqlite3
 from flask_sqlalchemy import SQLAlchemy
-from models import User
-from config import db,app
+from .models import User
+# from config import db
+# from __init__ import db,app
+# from SlackBot.models import User
+# from config import app,db
 
 
 # db = SQLAlchemy(app)
@@ -19,10 +22,12 @@ from config import db,app
 
 
 
+
+
 load_dotenv() 
 SIGN_IN_SECRET = os.getenv("SIGN_IN_SECRET")
 Token = os.getenv("SLACK_TOKEN")
-app = Flask(__name__)
+#app = Flask(__name__)
 slack_event_adapter = SlackEventAdapter(SIGN_IN_SECRET,'/slack/events',app)
 
 env_path = Path('.')/ '.env'
@@ -164,7 +169,9 @@ def message_count():
     client.chat_postMessage(
         channel=channel_id, text=f"Message: {message_count}")
     print(data)
-    db.users.add(User)
+    new_user = User(1,'brent',user_id,'test',message_count)
+    db.session.add(new_user)
+    db.session.commit()
     
     return Response(), 200
 

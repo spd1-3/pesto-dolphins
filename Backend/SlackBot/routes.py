@@ -3,8 +3,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from datetime import date, datetime
-from models  import User, Team
-from config import db, app
+
+from .bot import message_counts,app,db,User
 
 
 main = Blueprint('main', __name__)
@@ -27,17 +27,13 @@ def create():
         message_content = data.get('text')
         message_count = message_counts.get(user_id, 0)
 
-        try:
-            date_and_time = datetime.strptime(
-                f'{date} {time}',
-                '%Y-%m-%d %H:%M')
-        except ValueError:
-            print('there was an error: incorrect datetime format')
-
+        print('------------------')
+        print('DATA RECIEVED')
        
-        
-        db.session.add(User)
+        new_user= User(1,'brent',user_id,message_content,message_count)
+        db.session.add(new_user)
         db.session.commit()
+
 
         flash('Event created.')
         return redirect(url_for('main.index'))
