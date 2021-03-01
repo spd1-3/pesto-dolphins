@@ -1,11 +1,19 @@
 import slack
 import os
+import sys 
 from pathlib import Path
 from dotenv import load_dotenv
 from flask import Flask, request, Response
 from slackeventsapi import SlackEventAdapter
-from Server.models import make_user
-from Server.app import usersdb
+import json
+import requests
+# sys.path.append(os.path.abspath(os.path.join('..','..','Server')))
+sys.path.append('/Users/brent/Desktop/Development/makeschool/term3/spd1.3/pesto-dolphins/Backend/Server/models.py')
+
+
+#from Server.models import *
+# from Server.app import usersdb
+# from Server.
 
 #from Server.models import make_user
 
@@ -13,7 +21,8 @@ from Server.app import usersdb
 
 
 
-load_dotenv() 
+load_dotenv()
+POST_URL = os.getenv('POST_URL') 
 SIGN_IN_SECRET = os.getenv("SIGN_IN_SECRET")
 Token = os.getenv("SLACK_TOKEN")
 app = Flask(__name__)
@@ -159,6 +168,9 @@ def message_count():
     client.chat_postMessage(
         channel=channel_id, text=f"Message: {message_count}")
     print(data)
+    headers = {'Content-Type': 'application/json'}
+    url = POST_URL + f'/user/{user_id}?name={user_id}&user_id={user_id}&email=example@email.com&channel_id={channel_id}'
+    response = requests.post(url, data=json.dumps(data), headers=headers)
    # new_user = make_user(1,'brent',user_id,'test',message_count)
     
     
@@ -169,15 +181,32 @@ def start():
     data =request.form
     user_id = request.form.get('user_id')
     user_name = request.form.get('user_name')
-    channel_id = request.form.get('channel_id')
-
-    new_user = make_user(user_name,user_id,'email@email.com',channel_id,)
-    usersdb.insert_one(new_user)
-
+    channel_id = request.form.get('team_id')
+    headers = {'Content-Type': 'application/json'}
+    url = POST_URL + f'/user/{user_id}?name={user_name}&user_id={user_id}&email=example@email.com&channel_id={channel_id}'
+    response = requests.post(url, data=json.dumps(data), headers=headers)
+    
+    # new_user = make_user(user_name,user_id,'email@email.com',channel_id,)
+    # usersdb.insert_one(new_user)
+    
     print(data)
     print(user_id)
     print(user_name)
+
+@ app.route('/start-server', methods = ['POST'])
+def start_server():
+    data =request.form
+    team_id = request.form.get('team_id')
+    team_domain = request.form.get('team_domain')
+    channel_id = request.form.get('channel_id')
+    headers = {'Content-Type': 'application/json'}
+    url = POST_URL + f'/channel/{team_id}?name={team_domain}&channel_id={channel_id}'
+    response = requests.post(url, data=json.dumps(data), headers=headers)
     
+    # new_user = make_user(user_name,user_id,'email@email.com',channel_id,)
+    # usersdb.insert_one(new_user)
+    
+   
 
     return Response(),200
 
