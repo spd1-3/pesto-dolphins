@@ -14,11 +14,13 @@ def make_message(message_id=None, text=None, sender_id=None):
         "sender_id": sender_id
     }
 
-def make_user(name=None, user_id=None, email=None, channel_id=None):
+def make_user(name=None, user_id=None, email=None, channel_id=None,team_id=None,access_token=None):
     return {
         "name": name,
         "user_id": user_id,
         "email": email,
         "channel_id": channel_id,
-        "total_messages": 0
+        "total_messages": 0,
+        "team_id":team_id,
+        "access_token":access_token
     }
