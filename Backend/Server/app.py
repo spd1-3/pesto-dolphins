@@ -1,11 +1,12 @@
 from flask import Flask, Response, request
 from flask_cors import CORS
-
+from urllib.parse import parse_qs, parse_qsl
 from flask_pymongo import PyMongo
+#from slackeventsapi import SlackEventAdapter
 
 from models import make_channel, make_message, make_user
 
-import requests
+import requests 
 import json
 import os
 from dotenv import load_dotenv, find_dotenv
@@ -13,6 +14,9 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
 MONGO_URI = os.environ.get("MONGO_URI")
+CLIENT_ID = os.environ.get('CLIENT_ID')
+CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
+
 
 #dev
 import json
@@ -135,9 +139,53 @@ def update_message_count():
         new_count = request.args['count']
         usersdb.update_one(
             {"user_id":  user_id},
-            {"$set": {"total_message": new_count}}
+            {"$set": {"total_messages": new_count}}
         )
         return Response(status=200)
+#change route to slack oauth si
+#
+
+@app.route('/testing',methods=['POST','GET'])
+def return_login_info():
+    code = request.args['code']
+
+    data = {
+        "code" : code,
+        "client_id": CLIENT_ID,
+        "client_secret":CLIENT_SECRET
+
+    }
+    
+    url = 'https://slack.com/api/oauth.v2.access'
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+    response = requests.post(url,{'code':code,
+    'client_id':CLIENT_ID,
+    'client_secret':CLIENT_SECRET
+    },{},headers=headers)
+    # data = response.content
+    # data = data.decode('utf-8')
+    # #data =json.load(data)
+    # raw = json.dumps(data,default=tuple)
+    # team_id = raw
+    # print(raw)
+    # #data = parse_qsl(data)
+    data = response.json()
+    #print(data)
+    print('-----')
+    print(data['authed_user']['access_token'])
+    print(data['team']['id'])
+    print('----')
+    access_token = data['authed_user']['access_token']
+    team_id = data['team']['id']
+    
+    #new_data = response.content.decode("utf-8")
+    
+    
+    
+    
+    return Response(data)
+    
+
 
 # @app.route('/test')
 # def make_user_test():
