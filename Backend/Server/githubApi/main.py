@@ -18,7 +18,7 @@ query = """
           name
           target {
             ... on Commit {
-              history(first: 100, since: "2021-01-11T00:00:00") {
+              history(first: 10, since: "2021-01-11T00:00:00") {
                 totalCount
                 nodes {
                   ... on Commit {
@@ -40,5 +40,5 @@ query = """
 }
 """
 result = run_query(query)
-remaining_rate_limit = result["data"]
-print("Remaining rate limit - {}".format(remaining_rate_limit))
+github_commits_results = result["data"]
+print("github commit details - {}".format(github_commits_results))
